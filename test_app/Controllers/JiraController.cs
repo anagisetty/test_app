@@ -1,30 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Test_App.Configuration;
+﻿using System.Web.Http;
+using test_app;
 
-namespace Test_App.Controllers
+namespace test_app
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class JiraController : ControllerBase
+    public class JiraController : ApiController
     {
-        [HttpGet]
-        public IActionResult GetJiraConfiguration()
+        [HttpPost]
+        public IHttpActionResult ConfigureJira(string jiraUrl, string username, string password)
         {
-            try
+            // Validate parameters
+            if (string.IsNullOrWhiteSpace(jiraUrl) ||
+                string.IsNullOrWhiteSpace(username) ||
+                string.IsNullOrWhiteSpace(password))
             {
-                var jiraConfiguration = Jira.GetConfiguration();
-                return Ok(jiraConfiguration);
+                return BadRequest("Invalid parameters");
             }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+
+            // Perform configuration
+            JiraConfig configuration = new JiraConfig(jiraUrl, username, password);
+            configuration.Configure();
+
+            return Ok();
         }
     }
 }
