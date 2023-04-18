@@ -1,46 +1,38 @@
 ﻿using System;
-using System.Net;
-using System.Net.Http;
-using System.Web.Http;
-using Test_App.Models;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using test_app.Models;
 
-namespace Test_App.Controllers
+namespace test_app.Controllers
 {
-    public class JiraController : ApiController
+    [Route("api/[controller]")]
+    [ApiController]
+    public class JiraController : ControllerBase
     {
-        // GET: api/Jira
         [HttpGet]
-        public HttpResponseMessage GetJiraConfiguration()
+        [Route("configureJira")]
+        public IActionResult ConfigureJira(int jiraId)
         {
+            var jiraConfig = new JiraConfig
+            {
+                JiraId = jiraId,
+                Url = "https://jira.example.com/",
+                UserName = "jirauser",
+                Password = "jirapassword",
+                IsActive = true
+            };
+
             try
             {
-                JiraConfiguration jiraConfig = new JiraConfiguration();
-                jiraConfig.ServerUrl = "https://jira.example.com";
-                jiraConfig.Username = "username";
-                jiraConfig.Password = "password";
-                jiraConfig.ClientId = "clientId";
-                jiraConfig.ClientSecret = "clientSecret";
-
-                return Request.CreateResponse(HttpStatusCode.OK, jiraConfig);
+                // Logic to store the Jira configuration
+                return Ok($"Jira configuration saved successfully.");
             }
             catch (Exception ex)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
-            }
-        }
-
-        // POST: api/Jira
-        [HttpPost]
-        public HttpResponseMessage PostJiraConfiguration([FromBody]JiraConfiguration jiraConfig)
-        {
-            try
-            {
-                // do something with jiraConfig
-                return Request.CreateResponse(HttpStatusCode.OK, "Jira configuration successfully updated.");
-            }
-            catch (Exception ex)
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+                return BadRequest($"Error while saving Jira configuration. {ex.Message}");
             }
         }
     }
