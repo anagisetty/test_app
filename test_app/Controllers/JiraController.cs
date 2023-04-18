@@ -1,39 +1,42 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using test_app.Models;
+﻿using System.Web.Http;
+using Test_App;
 
-namespace test_app.Controllers
+namespace Test_App
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class JiraController : ControllerBase
+    public class JiraController : ApiController
     {
-        [HttpGet]
-        [Route("configureJira")]
-        public IActionResult ConfigureJira(int jiraId)
+        [HttpPost]
+        [Route("jira/config")]
+        public IHttpActionResult SetJiraConfig(JiraConfig config)
         {
-            var jiraConfig = new JiraConfig
+            //Validate model
+            if(!ModelState.IsValid)
+                return BadRequest(ModelState);
+            
+            //Save config
+            var result = JiraConfigManager.Save(config);
+            if(result)
             {
-                JiraId = jiraId,
-                Url = "https://jira.example.com/",
-                UserName = "jirauser",
-                Password = "jirapassword",
-                IsActive = true
-            };
+                return Ok();
+            }
 
-            try
-            {
-                // Logic to store the Jira configuration
-                return Ok($"Jira configuration saved successfully.");
-            }
-            catch (Exception ex)
-            {
-                return BadRequest($"Error while saving Jira configuration. {ex.Message}");
-            }
+            return InternalServerError();
+        }
+    }
+    
+    public class JiraConfig
+    {
+        public string BaseUrl { get; set; }
+        public string Username { get; set; }
+        public string Password { get; set; }
+    }
+
+    public static class JiraConfigManager
+    {
+        public static bool Save(JiraConfig config)
+        {
+            //Save config to db
+            return true;
         }
     }
 }
