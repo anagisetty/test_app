@@ -1,37 +1,27 @@
-﻿namespace test_app
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using test_app.Models;
+
+namespace test_app.Controllers
 {
-    using System.Web.Http;
-
-    public class JiraController : ApiController
+    [Route("api/[controller]")]
+    [ApiController]
+    public class JiraController : ControllerBase
     {
-        // GET: api/Jira
-        public IEnumerable<string> Get()
+        public JiraController()
         {
-            return new string[] { "value1", "value2" };
         }
 
-        // GET: api/Jira/5
-        public string Get(int id)
+        [HttpGet]
+        [Route("configure")]
+        public ActionResult ConfigureJira()
         {
-            return "value";
-        }
-
-        // POST: api/Jira
-        public void Post([FromBody]string value)
-        {
-            // Configuration of Jira
-        }
-
-        // PUT: api/Jira/5
-        public void Put(int id, [FromBody]string value)
-        {
-            // Configuration of Jira
-        }
-
-        // DELETE: api/Jira/5
-        public void Delete(int id)
-        {
-            // Configuration of Jira
+            //Code for configuration of JIRA
+            return new OkObjectResult("JIRA configured successfully");
         }
     }
 }
