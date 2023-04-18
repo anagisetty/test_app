@@ -1,42 +1,102 @@
-﻿using System.Web.Http;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Test_App.Models;
 
-namespace test_app
+namespace Test_App.Controllers
 {
-    public class JiraConfigurationController : ApiController
+    [Route("api/[controller]")]
+    [ApiController]
+    public class JiraConfigurationController : ControllerBase
     {
+        // GET api/JiraConfiguration
         [HttpGet]
-        public IHttpActionResult GetJiraConfiguration()
+        public ActionResult<IEnumerable<JiraConfiguration>> Get()
         {
-            try
-            {
-                //Get Jira Configuration
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return InternalServerError(ex);
-            }
+            JiraConfiguration jiraConfiguration = new JiraConfiguration();
+
+            //Get configuration details from database
+            jiraConfiguration = GetConfigurationFromDatabase();
+
+            return Ok(jiraConfiguration);
         }
 
+        // POST api/JiraConfiguration
         [HttpPost]
-        public IHttpActionResult UpdateJiraConfiguration(JiraConfiguration jiraConfiguration)
+        public ActionResult<JiraConfiguration> Post([FromBody] JiraConfiguration jiraConfiguration)
         {
-            try
+            if (jiraConfiguration == null)
             {
-                //Update Jira Configuration
-                return Ok();
+                return BadRequest();
             }
-            catch (Exception ex)
+            else
             {
-                return InternalServerError(ex);
+                //Save configuration details to database
+                SaveConfigurationToDatabase(jiraConfiguration);
+
+                return Ok(jiraConfiguration);
             }
         }
-    }
 
-    public class JiraConfiguration
-    {
-        public string Url { get; set; }
-        public string UserName { get; set; }
-        public string Password { get; set; }
+        // PUT api/JiraConfiguration
+        [HttpPut]
+        public ActionResult<JiraConfiguration> Put([FromBody] JiraConfiguration jiraConfiguration)
+        {
+            if (jiraConfiguration == null)
+            {
+                return BadRequest();
+            }
+            else
+            {
+                //Update configuration details in database
+                UpdateConfigurationInDatabase(jiraConfiguration);
+
+                return Ok(jiraConfiguration);
+            }
+        }
+
+        // DELETE api/JiraConfiguration
+        [HttpDelete]
+        public ActionResult<JiraConfiguration> Delete([FromBody] JiraConfiguration jiraConfiguration)
+        {
+            if (jiraConfiguration == null)
+            {
+                return BadRequest();
+            }
+            else
+            {
+                //Delete configuration details from database
+                DeleteConfigurationFromDatabase(jiraConfiguration);
+
+                return Ok(jiraConfiguration);
+            }
+        }
+
+        //Get configuration details from database
+        public static JiraConfiguration GetConfigurationFromDatabase()
+        {
+            //Database code
+            return null;
+        }
+
+        //Save configuration details to database 
+        public static void SaveConfigurationToDatabase(JiraConfiguration jiraConfiguration)
+        {
+            //Database code
+        }
+
+        //Update configuration details in database
+        public static void UpdateConfigurationInDatabase(JiraConfiguration jiraConfiguration)
+        {
+            //Database code
+        }
+
+        //Delete configuration details from database
+        public static void DeleteConfigurationFromDatabase(JiraConfiguration jiraConfiguration)
+        {
+            //Database code
+        }
     }
 }
