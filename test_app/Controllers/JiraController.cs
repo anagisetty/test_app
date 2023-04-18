@@ -1,42 +1,37 @@
-﻿using System.Web.Http;
-using Test_App;
-
-namespace Test_App
+﻿namespace test_app
 {
+    using System.Web.Http;
+
     public class JiraController : ApiController
     {
-        [HttpPost]
-        [Route("jira/config")]
-        public IHttpActionResult SetJiraConfig(JiraConfig config)
+        // GET: api/Jira
+        public IEnumerable<string> Get()
         {
-            //Validate model
-            if(!ModelState.IsValid)
-                return BadRequest(ModelState);
-            
-            //Save config
-            var result = JiraConfigManager.Save(config);
-            if(result)
-            {
-                return Ok();
-            }
-
-            return InternalServerError();
+            return new string[] { "value1", "value2" };
         }
-    }
-    
-    public class JiraConfig
-    {
-        public string BaseUrl { get; set; }
-        public string Username { get; set; }
-        public string Password { get; set; }
-    }
 
-    public static class JiraConfigManager
-    {
-        public static bool Save(JiraConfig config)
+        // GET: api/Jira/5
+        public string Get(int id)
         {
-            //Save config to db
-            return true;
+            return "value";
+        }
+
+        // POST: api/Jira
+        public void Post([FromBody]string value)
+        {
+            // Configuration of Jira
+        }
+
+        // PUT: api/Jira/5
+        public void Put(int id, [FromBody]string value)
+        {
+            // Configuration of Jira
+        }
+
+        // DELETE: api/Jira/5
+        public void Delete(int id)
+        {
+            // Configuration of Jira
         }
     }
 }
