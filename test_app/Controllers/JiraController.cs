@@ -1,26 +1,47 @@
-﻿using System.Web.Http;
-using test_app;
+﻿using System;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
+using Test_App.Models;
 
-namespace test_app
+namespace Test_App.Controllers
 {
     public class JiraController : ApiController
     {
-        [HttpPost]
-        public IHttpActionResult ConfigureJira(string jiraUrl, string username, string password)
+        // GET: api/Jira
+        [HttpGet]
+        public HttpResponseMessage GetJiraConfiguration()
         {
-            // Validate parameters
-            if (string.IsNullOrWhiteSpace(jiraUrl) ||
-                string.IsNullOrWhiteSpace(username) ||
-                string.IsNullOrWhiteSpace(password))
+            try
             {
-                return BadRequest("Invalid parameters");
+                JiraConfiguration jiraConfig = new JiraConfiguration();
+                jiraConfig.ServerUrl = "https://jira.example.com";
+                jiraConfig.Username = "username";
+                jiraConfig.Password = "password";
+                jiraConfig.ClientId = "clientId";
+                jiraConfig.ClientSecret = "clientSecret";
+
+                return Request.CreateResponse(HttpStatusCode.OK, jiraConfig);
             }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
 
-            // Perform configuration
-            JiraConfig configuration = new JiraConfig(jiraUrl, username, password);
-            configuration.Configure();
-
-            return Ok();
+        // POST: api/Jira
+        [HttpPost]
+        public HttpResponseMessage PostJiraConfiguration([FromBody]JiraConfiguration jiraConfig)
+        {
+            try
+            {
+                // do something with jiraConfig
+                return Request.CreateResponse(HttpStatusCode.OK, "Jira configuration successfully updated.");
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
         }
     }
 }
