@@ -4,69 +4,65 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
-@Entity 
-@Table(name = "userstory")
-public class UserStory {
+@Entity
+public class UserStory { 
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	
+	private String storyTitle; 
+	
+	private String storyDescription; 
+	
+	@ManyToOne 
+	@JoinColumn(name = "assigned_team_member_id") 
+	private AssignedTeamMember assignedTeamMember;
+	
+	public UserStory() { 
+		
+	}
+	
+	public UserStory(String storyTitle, String storyDescription, AssignedTeamMember assignedTeamMember) { 
+		this.storyTitle = storyTitle; 
+		this.storyDescription = storyDescription; 
+		this.assignedTeamMember = assignedTeamMember; 
+	}
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String title;
-    private String description;
-    private String assignedTeamMember;
-    private boolean fetchedFromJiraApi;
+	public Long getId() {
+		return id;
+	}
 
-    public UserStory() {
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public UserStory(Long id, String title, String description, String assignedTeamMember, boolean fetchedFromJiraApi) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.assignedTeamMember = assignedTeamMember;
-        this.fetchedFromJiraApi = fetchedFromJiraApi;
-    }
+	public String getStoryTitle() {
+		return storyTitle;
+	}
 
-    public Long getId() {
-        return id;
-    }
+	public void setStoryTitle(String storyTitle) {
+		this.storyTitle = storyTitle;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public String getStoryDescription() {
+		return storyDescription;
+	}
 
-    public String getTitle() {
-        return title;
-    }
+	public void setStoryDescription(String storyDescription) {
+		this.storyDescription = storyDescription;
+	}
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+	public AssignedTeamMember getAssignedTeamMember() {
+		return assignedTeamMember;
+	}
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getAssignedTeamMember() {
-        return assignedTeamMember;
-    }
-
-    public void setAssignedTeamMember(String assignedTeamMember) {
-        this.assignedTeamMember = assignedTeamMember;
-    }
-
-    public boolean isFetchedFromJiraApi() {
-        return fetchedFromJiraApi;
-    }
-
-    public void setFetchedFromJiraApi(boolean fetchedFromJiraApi) {
-        this.fetchedFromJiraApi = fetchedFromJiraApi;
-    }
-
+	public void setAssignedTeamMember(AssignedTeamMember assignedTeamMember) {
+		this.assignedTeamMember = assignedTeamMember;
+	}
+	
+	
 }

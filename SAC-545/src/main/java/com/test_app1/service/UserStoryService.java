@@ -1,6 +1,7 @@
 package com.test_app1.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -8,25 +9,29 @@ import org.springframework.stereotype.Service;
 import com.test_app1.model.UserStory;
 import com.test_app1.repository.UserStoryRepository;
 
-@Service
+@Service 
 public class UserStoryService {
 
-    @Autowired
-    private UserStoryRepository userStoryRepository;
+	@Autowired 
+	private UserStoryRepository userStoryRepository; 
 
-    public List<UserStory> findByTitle(String title) {
-        return userStoryRepository.findByTitle(title);
-    }
+	public List<UserStory> findAllByOrderByIdAsc() {
+		return userStoryRepository.findAllByOrderByIdAsc();
+	}
 
-    public List<UserStory> findByDescription(String description) {
-        return userStoryRepository.findByDescription(description);
-    }
+	public List<UserStory> findByStoryTitle(String storyTitle) {
+		return userStoryRepository.findByStoryTitle(storyTitle);
+	}
 
-    public List<UserStory> findByAssignedTeamMember(String assignedTeamMember) {
-        return userStoryRepository.findByAssignedTeamMember(assignedTeamMember);
-    }
+	public Optional<UserStory> findByStoryDescription(String storyDescription) {
+		return userStoryRepository.findByStoryDescription(storyDescription);
+	}
 
-    public List<UserStory> findByFetchedFromJiraApi(boolean fetchedFromJiraApi) {
-        return userStoryRepository.findByFetchedFromJiraApi(fetchedFromJiraApi);
-    }
+	public Optional<UserStory> findByAssignedTeamMember(AssignedTeamMember assignedTeamMember) {
+		return userStoryRepository.findByAssignedTeamMember(assignedTeamMember);
+	}
+
+	public void deleteById(Long id) {
+		userStoryRepository.deleteById(id);
+	}
 }
